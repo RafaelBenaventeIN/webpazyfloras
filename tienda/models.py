@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+import re
 
 def validate_image_size(image):
     min_width = 700
@@ -97,18 +98,22 @@ def validar_numero_entero(precio_total:str):
             [f'Solo se permiten valores enteros.']
             )
 
-def validar_nombre_producto(nombre:str):
+def validar_nombre_producto(nombre: str):
+    # Definimos la expresión regular para permitir solo letras y espacios
+    patron = r'^[a-zA-Z\s]+$'
     error_isnotalpha = False
-    error_message_isnotalpha = 'El nombre no debe poseer carácteres extraños '
+    error_message_isnotalpha = 'El nombre no debe poseer caracteres extraños'
     error_message = ''
-    if not nombre.isalpha():
+
+    # Validamos el nombre con la expresión regular
+    if not re.match(patron, nombre):
         error_isnotalpha = True
-        error_message+='\n'+error_message_isnotalpha+'('+str(nombre)+').'
-            
+        error_message += '\n' + error_message_isnotalpha + ' (' + str(nombre) + ').'
+
     if error_isnotalpha:
         raise ValidationError(
-            [f'{error_message} El nombre debe ser solo alfabético.']
-            )
+            [f'{error_message} El nombre debe ser solo alfabético y puede contener espacios.']
+        )
 
 def validar_tipo_producto(tipo:str):
     tipos = ["vasija","macetero","planta"]
@@ -138,7 +143,7 @@ class Producto(models.Model):
     tipo = models.CharField(    max_length=100,
                                 choices=tipos,
                                 validators=[validar_tipo_producto])
-    nombre = models.CharField(  max_length=100)
+    nombre = models.CharField(  max_length=100, validators=[validar_nombre_producto])
     precio = models.IntegerField(validators=[validar_numero_entero])
     descripcion = models.CharField(max_length=1024)
     imagen = models.ImageField(upload_to='productos', 

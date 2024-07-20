@@ -78,12 +78,17 @@ WSGI_APPLICATION = 'webpazyfloras.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+import configparser
+# Leer configuración desde el archivo database.ini
+config = configparser.ConfigParser()
+config.read('database.ini')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tiendapazyfloras',
-        'USER': 'root',  
-        'PASSWORD': '',  
+        'ENGINE': config['database']['ENGINE'],
+        'NAME': config['database']['NAME'],
+        'USER': config['database']['USER'],
+        'PASSWORD': config['database']['PASSWORD'],
     }
 }
 
