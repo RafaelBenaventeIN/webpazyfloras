@@ -26,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1i7u$+&*r8r&ld%1q+eaq^r*%0lj4&f4uo^ze4b73ilw+j8$80'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -137,9 +137,9 @@ LOGIN_REDIRECT_URL = '/tienda/index'
 
 LOGOUT_REDIRECT_URL = '/tienda/index'
 
-STATICFILES_DIRS = [os.path.join('static/')]
-
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
